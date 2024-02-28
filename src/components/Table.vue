@@ -36,7 +36,7 @@ import Button from './Button.vue'
                   Male
                 </td>
                 <td class="px-5 py-4 text-sm font-medium text-center whitespace-nowrap border">
-                  <Button>
+                  <Button variant="secondary">
                     Edit
                   </Button>
                 </td>
