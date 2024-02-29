@@ -1,5 +1,9 @@
 <script setup lang='ts'>
 import Button from './Button.vue'
+
+defineProps<{
+  data: Array<{ id: string, username: string, gender: string }>
+}>()
 </script>
 
 <template>
@@ -25,15 +29,15 @@ import Button from './Button.vue'
               </tr>
             </thead>
             <tbody class="divide-y divide-neutral-200">
-              <tr class="text-neutral-800">
+              <tr v-for="item in data" :key="item.id" class="text-neutral-800">
                 <td class="px-5 py-4 text-sm font-medium text-center whitespace-nowrap border">
-                  1
+                  {{ item.id }}
                 </td>
                 <td class="px-5 py-4 text-sm whitespace-nowrap text-center border">
-                  Erlich Bachman
+                  {{ item.username }}
                 </td>
                 <td class="px-5 py-4 text-sm whitespace-nowrap text-center border">
-                  Male
+                  {{ item.gender }}
                 </td>
                 <td class="px-5 py-4 text-sm font-medium text-center whitespace-nowrap border">
                   <Button variant="secondary">

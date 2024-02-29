@@ -8,7 +8,7 @@ defineProps<{
 }>()
 const emit = defineEmits(['update:selected'])
 
-const selected = ref('')
+const selected = defineModel()
 const isOpen = ref(false)
 
 function onClick(val: string) {
@@ -32,7 +32,7 @@ function onClick(val: string) {
         aria-labelledby="listbox-label"
         @click="isOpen = !isOpen"
       >
-        <div class="w-5 h-5 flex-shrink-0">
+        <div class="w-5 h-5 flex-shrink-0 text-sm">
           {{ selected }}
         </div>
         <ArrowDown />
