@@ -10,15 +10,30 @@ import { getAllUser } from '@/api/user'
 
 const isOpen = ref(false)
 const tableData = ref<Array<User>>([])
+const currentId = ref()
+const page = ref(1)
+const totalPages = ref(1)
 
 function openDialog() {
   isOpen.value = true
+  currentId.value = undefined
 }
 
 function fetchData() {
-  getAllUser().then((res) => {
-    tableData.value = res
+  getAllUser(page.value).then((res) => {
+    tableData.value = res.users
+    totalPages.value = res.total_pages
   })
+}
+
+function onEdit(id: string) {
+  isOpen.value = true
+  currentId.value = id
+}
+
+function onPagination(val: number) {
+  page.value = val
+  fetchData()
 }
 
 fetchData()
@@ -31,8 +46,8 @@ fetchData()
         Add User
       </Button>
     </div>
-    <Table :data="tableData" />
-    <Pagination class="my-4" />
-    <UserCU :is-open="isOpen" @close="isOpen = false" />
+    <Table :data="tableData" @edit="onEdit" />
+    <Pagination class="my-4" :page="page" :total-pages="totalPages" @update="onPagination" />
+    <UserCU :id="currentId" :is-open="isOpen" @close="isOpen = false" @update="fetchData" />
   </div>
 </template>

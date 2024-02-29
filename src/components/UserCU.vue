@@ -1,17 +1,17 @@
 <script setup lang='ts'>
-import { ref, shallowRef } from 'vue'
+import { ref, shallowRef, watch } from 'vue'
 import Dialog from './Dialog.vue'
 import Button from './Button.vue'
 import Input from './Input.vue'
 import Select from './Select.vue'
-import { createUser } from '@/api/user'
+import { createUser, getUserById, updateUserById } from '@/api/user'
 
 const props = defineProps<{
   isOpen: boolean
-  id?: string
+  id?: number
 }>()
 
-defineEmits(['close', 'update'])
+const emit = defineEmits(['close', 'update'])
 
 const username = ref('')
 const gender = ref('')
@@ -27,21 +27,58 @@ const options = shallowRef([
   },
 ])
 
+function clear() {
+  username.value = ''
+  gender.value = ''
+}
+
 function onSubmit() {
   if (!username.value || !gender.value)
     return
 
   if (!props.id) {
     createUser(username.value, gender.value).then((res) => {
-      console.log(res)
+      if (res) {
+        // alert(res)
+        emit('update')
+      }
     }).catch((err) => {
       console.error(err)
+    }).finally(() => {
+      emit('close')
+      clear()
     })
   }
   else {
-    // TODO
+    updateUserById(props.id, {
+      username: username.value,
+      gender: gender.value,
+    }).then((res) => {
+      if (res) {
+        // alert(res)
+        emit('update')
+      }
+    }).catch((err) => {
+      console.error(err)
+    }).finally(() => {
+      emit('close')
+      clear()
+    })
   }
 }
+
+watch(() => props.id, () => {
+  if (props.id) {
+    getUserById(props.id).then((res) => {
+      username.value = res.username
+      gender.value = res.gender
+    })
+  }
+  else {
+    username.value = ''
+    gender.value = ''
+  }
+})
 </script>
 
 <template>

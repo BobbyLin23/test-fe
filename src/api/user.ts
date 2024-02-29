@@ -12,9 +12,33 @@ export function createUser(username: string, gender: string): Promise<string> {
   })
 }
 
-export function getAllUser(): Promise<User[]> {
+export function getAllUser(page: number): Promise<{
+  total_pages: number
+  users: User[]
+}> {
   return request({
     url: '/users',
+    params: {
+      page,
+    },
     method: 'get',
+  })
+}
+
+export function getUserById(id: number): Promise<User> {
+  return request({
+    url: `/user/${id}`,
+    method: 'get',
+  })
+}
+
+export function updateUserById(id: number, data: {
+  username: string
+  gender: string
+}): Promise<User> {
+  return request({
+    url: `/user/${id}`,
+    method: 'put',
+    data,
   })
 }

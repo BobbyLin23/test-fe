@@ -1,9 +1,20 @@
 <script setup lang='ts'>
+import { ref } from 'vue'
 import Button from './Button.vue'
 
 defineProps<{
   data: Array<{ id: string, username: string, gender: string }>
 }>()
+const emit = defineEmits(['edit'])
+
+const isOpen = ref(false)
+const current_id = ref()
+
+function onEdit(id: string) {
+  isOpen.value = true
+  current_id.value = id
+  emit('edit', id)
+}
 </script>
 
 <template>
@@ -40,7 +51,7 @@ defineProps<{
                   {{ item.gender }}
                 </td>
                 <td class="px-5 py-4 text-sm font-medium text-center whitespace-nowrap border">
-                  <Button variant="secondary">
+                  <Button variant="secondary" @click="onEdit(item.id)">
                     Edit
                   </Button>
                 </td>
@@ -52,5 +63,3 @@ defineProps<{
     </div>
   </div>
 </template>
-
-<style scoped></style>
